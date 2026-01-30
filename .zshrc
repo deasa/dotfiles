@@ -1,19 +1,10 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/brendan.ashton/.oh-my-zsh"
-# Add Visual Studio Code (code)
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-export PATH="$PATH:/usr/local/go/bin"
-export PATH="$PATH:/Applications/GoLand.app/Contents/MacOS"
-export GOPRIVATE="weavelab.xyz/*"
-export GOROOT="/usr/local/go/"
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes 
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="Soliah"
 
 # Set list of themes to pick from when loading at random
@@ -69,24 +60,6 @@ DISABLE_MAGIC_FUNCTIONS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  docker
-  kubectl
-  zsh-autosuggestions
-)
-
-source $ZSH/oh-my-zsh.sh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.bash_profile
-source <(bart completion zsh)
-source ~/.zshenv
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -104,30 +77,20 @@ source ~/.zshenv
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/brendan.ashton/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/brendan.ashton/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Kubernetes
 alias kd='kubectl --context=wsf-dev-0-gke1-west4'
-alias kg='kubectl --context=gke1-west3'
-alias kdd='kubectl --context=wsf-dev-0-gke1-west4 -n devx'
-alias kgd='kubectl --context=gke1-west3 -n devx'
-alias kds='kubectl --context=wsf-dev-0-gke1-west4 -n sync-apps'
-alias kgs='kubectl --context=gke1-west3 -n sync-apps'
-alias kdt='kubectl --context=wsf-dev-0-gke1-west4 -n test-infra'
-alias kgt='kubectl --context=gke1-west3 -n test-infra'
 kdtpod () { kubectl --context=wsf-dev-0-gke1-west4 -n test-infra get pods --template '{{range .items}}{{.metadata.name}}{{end}}' --selector=app="${1}";}
 execToPod () { kubectl --context=wsf-dev-0-gke1-west4 -n test-infra "$(kdtpod $1)" -c "$1" --/bin/bash;}
 getTASJobs() {
     if [ -z "$1" ]; then
         echo "Please provide the namespace."
         return 1
-    fi 
+    fi
 
     local namespace="$1"
-    
+
     kubectl --context=wsf-dev-0-gke1-west4 -n ${namespace} get jobs --sort-by=.metadata.creationTimestamp | grep tas
 }
 getTASJobLogs() {
@@ -139,7 +102,7 @@ getTASJobLogs() {
         echo "Please provide the job name."
         return 1
     fi
-    
+
     local namespace="$1"
     local job_name="$2"
 
@@ -216,7 +179,7 @@ goGetWeave() {
     fi
 
     local dep_name="$1"
-    
+
     go get "weavelab.xyz/${dep_name}"
     go mod tidy
 }
@@ -225,9 +188,9 @@ goGetWeave() {
 alias ll='ls -lah'
 alias wdev='cd ~/go/src/weavelab.xyz/'
 alias updateSyncApp='cd ~/go/src/weavelab.xyz/sync-app/dev/scripts ; ./update-single-cloud-sync-app.sh'
-alias upSource='source ~/.bash_profile'
+alias upSource='source ~/.zshrc'
 alias grpcProxy='cd ~/go/src/github.com/jnewmano/grpc-json-proxy ; ./grpc-json-proxy'
-alias bashProfile='code ~/.bash_profile'
+alias bashProfile='code /Users/brendanashton/developer/dotfiles/.zshrc'
 alias rm='rm -i'
 alias decodeAndJq='pbpaste | base64 --decode | jq .'
 alias decode='pbpaste | base64 --decode'
@@ -254,6 +217,45 @@ bartDB() {
 
     local database="$1"
     local schema="$2"
-    
+
     bart database proxy --listen=localhost:5432 --instance=wsf-dev-0:us-west4:pgsql-west4-dev0-2a --database=${database} --schema=${schema}
 }
+
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  zsh-autosuggestions
+)
+
+# Path to your oh-my-zsh installation.
+export ZSH=~/.oh-my-zsh
+# Add Visual Studio Code (code)
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="$PATH:/Applications/GoLand.app/Contents/MacOS"
+export PATH="$PATH:/Users/brendanashton/.rd/bin"
+export PATH="$PATH:/Users/brendanashton/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.7.darwin-arm64/bin/"
+export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="$PATH:/opt/homebrew/opt/postgresql@17/bin/"
+export PATH="$HOME/.local/bin:$PATH"
+export GOPRIVATE="weavelab.xyz/*"
+
+# Claude Code variables
+export CLAUDE_CODE_USE_VERTEX=1
+export CLOUD_ML_REGION=global
+export ANTHROPIC_VERTEX_PROJECT_ID="ai-code-assist-462623"
+export VERTEX_REGION_CLAUDE_4_5_SONNET=us-east5
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+eval "$(pyenv init --path)"
+
+source $ZSH/oh-my-zsh.sh
+source <(bart completion zsh)
+# syntax highlighting needs to be last in the file
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
