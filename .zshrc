@@ -190,7 +190,7 @@ alias wdev='cd ~/go/src/weavelab.xyz/'
 alias updateSyncApp='cd ~/go/src/weavelab.xyz/sync-app/dev/scripts ; ./update-single-cloud-sync-app.sh'
 alias upSource='source ~/.zshrc'
 alias grpcProxy='cd ~/go/src/github.com/jnewmano/grpc-json-proxy ; ./grpc-json-proxy'
-alias bashProfile='code /Users/brendanashton/developer/dotfiles/.zshrc'
+alias bashProfile='code /Users/brendanashton/developer/github.com/deasa/dotfiles/.zshrc'
 alias rm='rm -i'
 alias decodeAndJq='pbpaste | base64 --decode | jq .'
 alias decode='pbpaste | base64 --decode'
@@ -228,7 +228,7 @@ bartDB() {
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-autosuggestions
+  golang
 )
 
 # Path to your oh-my-zsh installation.
@@ -253,9 +253,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-eval "$(pyenv init --path)"
-
 source $ZSH/oh-my-zsh.sh
 source <(bart completion zsh)
-# syntax highlighting needs to be last in the file
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
